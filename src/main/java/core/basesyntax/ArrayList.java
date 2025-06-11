@@ -43,8 +43,9 @@ public class ArrayList<T> implements List<T> {
         if (list.isEmpty()) {
             return;
         }
-        while (array.length < (size + list.size())) {
-            grow();
+        int requiredCapacity = size + list.size();
+        if (array.length < requiredCapacity) {
+            growTo(requiredCapacity);
         }
         for (int i = 0; i < list.size(); i++) {
             array[size++] = list.get(i);
@@ -122,5 +123,16 @@ public class ArrayList<T> implements List<T> {
             }
         }
         return -1;
+    }
+
+    private void growTo(int requiredCapacity) {
+        int newCapacity = array.length;
+        while (newCapacity < requiredCapacity) {
+            newCapacity = (int) (newCapacity * 1.5);
+        }
+
+        T[] newArray = (T[]) new Object[newCapacity];
+        System.arraycopy(array, 0, newArray, 0, size);
+        array = newArray;
     }
 }
